@@ -6,20 +6,21 @@ const initialItem = {
     title: '',
     director: '',
     metascore: '',
-    stars: ''
+    stars: []
     
   };
   
   const UpdateMovie = props => {
+      
    const [movies, setMovies] = useState(initialItem);
-console.log('propp',props)
-   const { match, movie }= props;
+console.log('propp', props)
+   const { match, movie, setMovie }= props;
    const id = match.params.id;
    useEffect(() => {
     
     const movieUpdate = movie.find(item => `${item.id}`=== id);
     if (movieUpdate) {
-        console.log(movieUpdate)
+        
         setMovies(movieUpdate);
     }
 
@@ -41,10 +42,13 @@ const changeHandle = i => {
     
    const handleSubmit = e => {
        e.preventDefault();
-       axios.put(`http://localhost:5000/api/movies/${id}`, movies)
-       .then(res => {console.log.log(res)
-
+       axios.put(`http://localhost:5000/api/movies/${movies.id}`, movies)
+       .then(res => {
+        props.handleUpdate();
         props.history.push(`/movies/${movies.id}`)
+      
+       })
+       .then(res => {
         setMovies(initialItem)
        })
         .catch(err => {
